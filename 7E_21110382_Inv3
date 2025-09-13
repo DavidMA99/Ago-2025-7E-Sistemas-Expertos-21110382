@@ -1,0 +1,14 @@
+7E_21110382_Inv3
+Monroy Alvarez Carlos David	21110382	Tarea 3		Sistemas Expertos
+Motores de Inferencia de la Actualidad
+Los motores de inferencia son el núcleo de los sistemas expertos y de muchas aplicaciones modernas de inteligencia artificial. Permiten razonar con la base de conocimientos para obtener conclusiones a partir de hechos conocidos.
+Métodos de Inferencia
+1	Encadenamiento hacia adelante (Forward chaining): parte de los hechos y aplica reglas hasta llegar a una conclusión.
+2	Encadenamiento hacia atrás (Backward chaining): parte de la hipótesis o meta y busca reglas y hechos que la justifiquen.
+3	Modus Ponens: si se cumple una premisa, se infiere una conclusión.
+4	Modus Tollens: si la conclusión es falsa, se infiere la falsedad de la premisa.
+Ejemplo de Modus Ponens
+Regla: Si llueve, entonces la calle está mojada. Hecho: Hoy llueve. Conclusión: La calle está mojada.
+Ejemplo de Modus Tollens
+Regla: Si llueve, entonces la calle está mojada. Hecho: La calle no está mojada. Conclusión: No está lloviendo.
+Repositorio en GitHub
