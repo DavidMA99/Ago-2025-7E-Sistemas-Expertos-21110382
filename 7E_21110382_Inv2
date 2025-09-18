@@ -1,44 +1,104 @@
 7E_21110382_Inv2 
 Monroy Alvarez Carlos David	21110382	Tarea 2		Sistemas Expertos
+
 1. Adquisición de conocimiento
-•	¿Qué es?
+
+¿Qué es?
 Es el proceso mediante el cual el sistema experto obtiene información de distintas fuentes: expertos humanos, sensores o bases de datos.
-•	¿Para qué sirve?
-Para capturar la experiencia y conocimientos necesarios que el sistema utilizará para resolver problemas. Sin esta etapa, el sistema no tendría contenido ni criterio para razonar.
-•	¿Cómo funciona?
-A través de un módulo de adquisición de conocimiento, que recibe datos del experto (mediante entrevistas o herramientas cognitivas), de sensores o de bases de datos, y los transforma en información entendible para el sistema.
+
+¿Para qué sirve?
+Para capturar la experiencia y conocimientos necesarios que el sistema utilizará para resolver problemas.
+
+¿Cómo funciona? (ejemplo en Python)
+Un sistema puede “aprender” nuevas respuestas cuando no encuentra una en su base de conocimiento.
+
+# Base inicial
+base_conocimiento = {"hola": "¡Hola! ¿Cómo estás?"}
+
+def adquirir_conocimiento(pregunta, respuesta):
+    base_conocimiento[pregunta.lower()] = respuesta
+    print("Nuevo conocimiento adquirido.")
+
+# Ejemplo: el usuario enseña al sistema
+adquirir_conocimiento("qué hora es", "No tengo reloj, pero puedes revisarlo en tu dispositivo.")
+print(base_conocimiento)
+
 2. Representación del conocimiento
-•	¿Qué es?
-Es la forma en que el conocimiento se organiza dentro del sistema.
-Aquí se incluyen:
-o	Base de conocimiento: reglas, hechos, heurísticas.
-o	Base de hechos: información específica de un problema.
-•	¿Para qué sirve?
-Para almacenar de manera estructurada el conocimiento general y los hechos particulares, facilitando que el sistema pueda razonar y dar respuestas lógicas.
-•	¿Cómo funciona?
-Mediante estructuras de representación (reglas, marcos, redes semánticas, etc.) que permiten al sistema acceder y relacionar la información cuando la necesite.
+
+¿Qué es?
+Es la forma en que el conocimiento se organiza dentro del sistema (reglas, hechos, heurísticas).
+
+¿Para qué sirve?
+Para estructurar el conocimiento general y los hechos particulares, permitiendo que el sistema pueda razonar.
+
+¿Cómo funciona? (ejemplo en Python)
+Se pueden usar reglas condicionales y hechos guardados en estructuras de datos.
+
+# Base de hechos
+hechos = {"llueve": True}
+
+# Base de conocimiento (reglas)
+def regla_calle_mojada(hechos):
+    if hechos.get("llueve", False):
+        hechos["calle_mojada"] = True
+
+# Aplicar regla
+regla_calle_mojada(hechos)
+print(hechos)
+
 3. Tratamiento del conocimiento
-•	¿Qué es?
-Es el proceso de razonamiento del sistema experto, donde se aplican técnicas de inferencia.
-Incluye:
-o	Motor de inferencia: mecanismo que aplica las reglas de la base de conocimiento a los hechos.
-o	Módulo de explicaciones: justifica las conclusiones o respuestas al usuario.
-•	¿Para qué sirve?
-Para resolver problemas, tomar decisiones y explicar por qué se llegó a una conclusión, lo cual da confianza al usuario.
-•	¿Cómo funciona?
-El motor de inferencia compara los hechos con las reglas, genera conclusiones y, en paralelo, el módulo de explicaciones guarda la trazabilidad para mostrar al usuario el razonamiento seguido.
+
+¿Qué es?
+Es el proceso de razonamiento, donde el motor de inferencia aplica reglas a los hechos y genera conclusiones.
+
+¿Para qué sirve?
+Para resolver problemas y justificar conclusiones.
+
+¿Cómo funciona? (ejemplo en Python)
+
+# Hechos iniciales
+hechos = {"fiebre": True, "tos": True}
+
+# Reglas (condición → conclusión)
+reglas = [
+    (lambda h: h["fiebre"] and h["tos"], "posible gripe")
+]
+
+# Motor de inferencia simple
+for condicion, conclusion in reglas:
+    if condicion(hechos):
+        hechos[conclusion] = True
+
+print("Hechos después del razonamiento:", hechos)
 
 4. Utilización del conocimiento
-•	¿Qué es?
-Es la interacción del sistema experto con el usuario final mediante una interfaz.
-•	¿Para qué sirve?
-Para que el usuario pueda consultar, recibir respuestas, explicaciones y recomendaciones del sistema experto.
-•	¿Cómo funciona?
-A través de una interfaz de usuario, que muestra las soluciones generadas por el motor de inferencia y permite la comunicación sencilla entre el usuario y el sistema.
-•	¿Qué? Es la arquitectura de un sistema experto que integra adquisición, representación, tratamiento y uso del conocimiento.
-•	¿Para qué? Para simular el razonamiento de un experto humano, resolver problemas complejos y brindar explicaciones fundamentadas.
-•	¿Cómo? Capturando conocimiento, organizándolo en bases, aplicando inferencias y comunicando los resultados al usuario.
 
+¿Qué es?
+Es la interacción del sistema experto con el usuario final mediante una interfaz.
+
+¿Para qué sirve?
+Para que el usuario consulte y reciba respuestas del sistema experto.
+
+¿Cómo funciona? (ejemplo en Python)
+
+# Base de conocimiento
+base_conocimiento = {
+    "hola": "¡Hola! ¿Cómo estás?",
+    "adiós": "Hasta luego."
+}
+
+def interfaz_usuario():
+    print("=== Chat con el sistema experto ===")
+    while True:
+        entrada = input("Tú: ").lower()
+        if entrada == "salir":
+            print("Sistema: Adiós 👋")
+            break
+        respuesta = base_conocimiento.get(entrada, "No sé cómo responder a eso.")
+        print("Sistema:", respuesta)
+
+# Ejecutar interacción
+# interfaz_usuario()
 
 5. Repositorio en GitHub
 https://github.com/DavidMA99/Ago-2025-7E-Sistemas-Expertos-21110382/edit/main/7E_21110382_Inv2
