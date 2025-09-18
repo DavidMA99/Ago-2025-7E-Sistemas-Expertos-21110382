@@ -3,13 +3,81 @@ Monroy Alvarez Carlos David	21110382	Tarea 3		Sistemas Expertos
 Motores de Inferencia de la Actualidad
 Los motores de inferencia son el núcleo de los sistemas expertos y de muchas aplicaciones modernas de inteligencia artificial. Permiten razonar con la base de conocimientos para obtener conclusiones a partir de hechos conocidos.
 Métodos de Inferencia
-1	Encadenamiento hacia adelante (Forward chaining): parte de los hechos y aplica reglas hasta llegar a una conclusión.
-2	Encadenamiento hacia atrás (Backward chaining): parte de la hipótesis o meta y busca reglas y hechos que la justifiquen.
-3	Modus Ponens: si se cumple una premisa, se infiere una conclusión.
-4	Modus Tollens: si la conclusión es falsa, se infiere la falsedad de la premisa.
-Ejemplo de Modus Ponens
-Regla: Si llueve, entonces la calle está mojada. Hecho: Hoy llueve. Conclusión: La calle está mojada.
-Ejemplo de Modus Tollens
-Regla: Si llueve, entonces la calle está mojada. Hecho: La calle no está mojada. Conclusión: No está lloviendo.
+
+1. Encadenamiento hacia adelante (Forward chaining)
+
+Parte de los hechos iniciales y aplica reglas sucesivamente hasta llegar a una conclusión.
+
+# Base de hechos
+hechos = {"tengo hambre": True, "hay comida": True}
+
+# Reglas (condición → conclusión)
+reglas = [
+    (lambda h: h["tengo hambre"] and h["hay comida"], "entonces como"),
+    (lambda h: h.get("entonces como", False), "estoy satisfecho")
+]
+
+# Motor de inferencia hacia adelante
+cambios = True
+while cambios:
+    cambios = False
+    for condicion, conclusion in reglas:
+        if conclusion not in hechos and condicion(hechos):
+            hechos[conclusion] = True
+            cambios = True
+
+print("Hechos inferidos:", hechos)
+
+2. Encadenamiento hacia atrás (Backward chaining)
+
+Parte de una meta o hipótesis y busca en la base de hechos y reglas si puede justificarse.
+
+# Base de hechos conocidos
+hechos = {"tengo hambre": True, "hay comida": True}
+
+# Reglas
+reglas = {
+    "entonces como": ["tengo hambre", "hay comida"],
+    "estoy satisfecho": ["entonces como"]
+}
+
+def puede_probar(meta, hechos, reglas):
+    if meta in hechos and hechos[meta]:
+        return True
+    if meta in reglas:
+        return all(puede_probar(p, hechos, reglas) for p in reglas[meta])
+    return False
+
+# Meta a comprobar
+meta = "estoy satisfecho"
+print(f"¿Se puede probar '{meta}'?", puede_probar(meta, hechos, reglas))
+
+3. Modus Ponens
+
+Si se cumple la premisa, se infiere la conclusión.
+
+# Regla: Si llueve, entonces la calle está mojada
+llueve = True
+
+if llueve:
+    calle_mojada = True
+else:
+    calle_mojada = False
+
+print("¿La calle está mojada?", calle_mojada)
+
+4. Modus Tollens
+
+Si la conclusión es falsa, se infiere la falsedad de la premisa.
+
+# Regla: Si llueve, entonces la calle está mojada
+calle_mojada = False
+
+if not calle_mojada:
+    llueve = False
+
+print("¿Está lloviendo?", llueve)
+
+
 Repositorio en GitHub
 https://github.com/DavidMA99/Ago-2025-7E-Sistemas-Expertos-21110382/blob/main/7E_21110382_Inv3
