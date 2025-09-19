@@ -12,16 +12,6 @@ Para capturar la experiencia y conocimientos necesarios que el sistema utilizar�
 ¿Cómo funciona? (ejemplo en Python)
 Un sistema puede “aprender” nuevas respuestas cuando no encuentra una en su base de conocimiento.
 
-# Base inicial
-base_conocimiento = {"hola": "¡Hola! ¿Cómo estás?"}
-
-def adquirir_conocimiento(pregunta, respuesta):
-    base_conocimiento[pregunta.lower()] = respuesta
-    print("Nuevo conocimiento adquirido.")
-
-# Ejemplo: el usuario enseña al sistema
-adquirir_conocimiento("qué hora es", "No tengo reloj, pero puedes revisarlo en tu dispositivo.")
-print(base_conocimiento)
 
 2. Representación del conocimiento
 
@@ -34,17 +24,6 @@ Para estructurar el conocimiento general y los hechos particulares, permitiendo 
 ¿Cómo funciona? (ejemplo en Python)
 Se pueden usar reglas condicionales y hechos guardados en estructuras de datos.
 
-# Base de hechos
-hechos = {"llueve": True}
-
-# Base de conocimiento (reglas)
-def regla_calle_mojada(hechos):
-    if hechos.get("llueve", False):
-        hechos["calle_mojada"] = True
-
-# Aplicar regla
-regla_calle_mojada(hechos)
-print(hechos)
 
 3. Tratamiento del conocimiento
 
@@ -56,20 +35,6 @@ Para resolver problemas y justificar conclusiones.
 
 ¿Cómo funciona? (ejemplo en Python)
 
-# Hechos iniciales
-hechos = {"fiebre": True, "tos": True}
-
-# Reglas (condición → conclusión)
-reglas = [
-    (lambda h: h["fiebre"] and h["tos"], "posible gripe")
-]
-
-# Motor de inferencia simple
-for condicion, conclusion in reglas:
-    if condicion(hechos):
-        hechos[conclusion] = True
-
-print("Hechos después del razonamiento:", hechos)
 
 4. Utilización del conocimiento
 
@@ -81,24 +46,86 @@ Para que el usuario consulte y reciba respuestas del sistema experto.
 
 ¿Cómo funciona? (ejemplo en Python)
 
-# Base de conocimiento
-base_conocimiento = {
-    "hola": "¡Hola! ¿Cómo estás?",
-    "adiós": "Hasta luego."
-}
+# Proyecto: Registro_Adquirir_Conocimiento
+# Materia: Sistemas Expertos 
+# Descripción:
+# Módulo de adquisición del conocimiento con un chat sencillo.
+# El sistema responde con frases precargadas y permite
+# registrar nuevo conocimiento si no encuentra coincidencia.
 
-def interfaz_usuario():
-    print("=== Chat con el sistema experto ===")
+import json
+import os
+
+ARCHIVO_CONOCIMIENTO = "base_conocimiento.json"
+
+# --- Funciones para persistencia ---
+def cargar_conocimiento():
+    """Carga la base de conocimiento desde un archivo JSON, o crea la inicial si no existe."""
+    if os.path.exists(ARCHIVO_CONOCIMIENTO):
+        with open(ARCHIVO_CONOCIMIENTO, "r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        # Base inicial si no existe el archivo
+        return {
+            "hola": "¡Hola! ¿Cómo estás?",
+            "como estas": "Estoy bien, gracias por preguntar. ¿Y tú?",
+            "de que te gustaria hablar": "Podemos hablar de tecnología, sistemas expertos o lo que quieras."
+        }
+
+def guardar_conocimiento():
+    """Guarda la base de conocimiento en un archivo JSON."""
+    with open(ARCHIVO_CONOCIMIENTO, "w", encoding="utf-8") as f:
+        json.dump(base_conocimiento, f, ensure_ascii=False, indent=4)
+
+# --- Base de conocimiento (se carga desde archivo o inicial) ---
+# (2) REPRESENTACIÓN DEL CONOCIMIENTO: La base de conocimiento se representa como un diccionario en Python.
+base_conocimiento = cargar_conocimiento()
+
+def normalizar_texto(texto):
+    """
+    Normaliza el texto quitando mayúsculas y espacios extra
+    para que las búsquedas sean más consistentes.
+    """
+    return texto.strip().lower()
+
+def adquirir_conocimiento(pregunta):
+    """
+    Permite al usuario registrar una nueva respuesta
+    cuando no existe en la base de conocimiento.
+    """
+    # (1) ADQUISICIÓN DE CONOCIMIENTO: El sistema solicita al usuario que ingrese nueva información.
+    print(f"No sé cómo responder a: '{pregunta}' 🤔")
+    nueva_respuesta = input("Por favor, ingresa la respuesta que debo aprender: ")
+    base_conocimiento[normalizar_texto(pregunta)] = nueva_respuesta
+    guardar_conocimiento()  # Guardamos inmediatamente
+    print("¡Gracias! He aprendido algo nuevo. ✅")
+
+def chat():
+    """
+    Inicia el chat interactivo con el usuario.
+    """
+    print("=== Bienvenido al Chat de Adquisición de Conocimiento ===")
+    print("Escribe 'salir' para terminar la conversación.\n")
+
     while True:
-        entrada = input("Tú: ").lower()
-        if entrada == "salir":
-            print("Sistema: Adiós 👋")
-            break
-        respuesta = base_conocimiento.get(entrada, "No sé cómo responder a eso.")
-        print("Sistema:", respuesta)
+        entrada = input("Tú: ")
+        entrada_norm = normalizar_texto(entrada)
 
-# Ejecutar interacción
-# interfaz_usuario()
+        if entrada_norm == "salir":
+            print("Chat finalizado. ¡Hasta luego!")
+            break
+
+        # (3) TRATAMIENTO DEL CONOCIMIENTO: El sistema procesa la entrada del usuario,
+        # compara con la base de conocimiento y decide cómo responder.
+        if entrada_norm in base_conocimiento:
+            # (4) UTILIZACIÓN DEL CONOCIMIENTO: El sistema aplica el conocimiento almacenado y responde.
+            print("Bot:", base_conocimiento[entrada_norm])
+        else:
+            adquirir_conocimiento(entrada)
+
+# Punto de entrada
+if __name__ == "__main__":
+    chat()
 
 5. Repositorio en GitHub
 https://github.com/DavidMA99/Ago-2025-7E-Sistemas-Expertos-21110382/edit/main/7E_21110382_Inv2
